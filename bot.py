@@ -90,12 +90,12 @@ def getConfig() :
 
 config = getConfig()
 
-# browser = webdriver.Firefox(executable_path=os.path.join(THIS_FOLDER, 'geckodriver.exe'))
-# browser.get("https://instagram.com")
+browser = webdriver.Firefox(executable_path=os.path.join(THIS_FOLDER, 'geckodriver.exe'))
+browser.get("https://instagram.com")
 
 username = config['username']
 password = config['password']
 count = config['count']
 tag = config['tag']
 
-# bot()
+bot()
