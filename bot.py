@@ -4,7 +4,7 @@ from selenium.webdriver.common.by import By
 import random
 import time
 import decimal
-browser = webdriver.Firefox(executable_path=r"C:\Users\LENOVO LEGION\Desktop\test-webbot\geckodriver.exe")
+browser = webdriver.Firefox(executable_path=r"C:\\Users\\LENOVO LEGION\\Desktop\\test-webbot\\geckodriver.exe")
 browser.get("https://instagram.com")
 
 username = ""
@@ -42,7 +42,7 @@ def getPost(count) :
     post = []
     while(True) : 
         if(len(browser.find_elements_by_xpath('/html/body/div[1]/section/main/article/div[2]/div/div/div/a')) < count) : 
-            driver.execute_script("window.scrollTo(0, 1000)") 
+            browser.execute_script("window.scrollTo(0, 1000)") 
         else : 
             break
     for posts in browser.find_elements_by_xpath('/html/body/div[1]/section/main/article/div[2]/div/div/div/a') : 
