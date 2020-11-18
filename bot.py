@@ -39,10 +39,10 @@ def itterateBot(count,tag) :
         
 
 def getPost(count) :    
-    post = []
+    post = []-
     while(True) : 
         if(len(browser.find_elements_by_xpath('/html/body/div[1]/section/main/article/div[2]/div/div/div/a')) < count) : 
-            browser.execute_script("window.scrollTo(0, 1000)") 
+            browser.execute_script("window.scrollBy(0, 1000)") 
         else : 
             break
     for posts in browser.find_elements_by_xpath('/html/body/div[1]/section/main/article/div[2]/div/div/div/a') : 
