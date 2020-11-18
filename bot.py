@@ -4,13 +4,10 @@ from selenium.webdriver.common.by import By
 import random
 import time
 import decimal
-browser = webdriver.Firefox(executable_path=r"C:\\Users\\LENOVO LEGION\\Desktop\\test-webbot\\geckodriver.exe")
-browser.get("https://instagram.com")
+import os
+import json
+THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
-username = ""
-password = ""
-count = 10
-tag = "#webdesign"
 def bot() :     
     waitFor(100,300,"input username")
     input = browser.find_element_by_xpath("/html/body/div[1]/section/main/article/div[2]/div[1]/div/form/div/div[1]/div/label/input")
@@ -39,7 +36,7 @@ def itterateBot(count,tag) :
         
 
 def getPost(count) :    
-    post = []-
+    post = []
     while(True) : 
         if(len(browser.find_elements_by_xpath('/html/body/div[1]/section/main/article/div[2]/div/div/div/a')) < count) : 
             browser.execute_script("window.scrollBy(0, 1000)") 
@@ -84,4 +81,21 @@ def closeNotif() :
 def logger(*args) : 
     print(" ".join(args),flush = True)
 
-bot()
+def getConfig() : 
+    config = os.path.join(THIS_FOLDER, 'config.json')
+    f = open(config)
+    return json.load(f)
+
+
+
+config = getConfig()
+
+# browser = webdriver.Firefox(executable_path=os.path.join(THIS_FOLDER, 'geckodriver.exe'))
+# browser.get("https://instagram.com")
+
+username = config['username']
+password = config['password']
+count = config['count']
+tag = config['tag']
+
+# bot()
