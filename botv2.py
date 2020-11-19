@@ -2,8 +2,11 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from utils import waitFor,getConfig,logger
+import random
 import os
 THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
+
+following = []
 
 def bot() :     
     waitFor(100,300,"input username")
@@ -16,32 +19,52 @@ def bot() :
     btn.send_keys(Keys.RETURN)
     closeSaveLogin()
     closeNotif()
-    itterateBot(count,tag)
+    runBot(count,tag)
 
-def itterateBot(count,tag) :
+def runBot(count,tag) :
     search(tag)
-    post = getPost(count)
-    for link in post :
-        browser.get(link)
-        waitFor(300,600,"Like post")
-        pressLike() 
+    getPost(count)
+    
 
 def getPost(count) :    
-    post = set()
-    while(True) :
-        postCount = len(post)
-        if(postCount < count) : 
-            for posts in browser.find_elements_by_xpath('/html/body/div[1]/section/main/article/div[2]/div/div/div/a') : 
-                post.add(posts.get_attribute("href"))
-            browser.execute_script("window.scrollBy(0, 1000)") 
-        else : 
-            break
-        waitFor(200,300,"Fetch post")
-    logger("Total post",str(len(post)))
-    return post
+    firstPost = browser.find_element_by_xpath("/html/body/div[1]/section/main/article/div[2]/div/div[1]/div[1]/a")
+    firstPost.send_keys(Keys.RETURN)    
+    for _ in range(0,count) : 
+        waitFor(300,800,"Load Post")
+        try:            
+            slidePic()
+            wantFollow()
+            pressLike()                                
+        except :
+            logger("Something went wrong")
+            pass        
+        waitFor(150,250,"Next Img")
+        browser.execute_script('document.getElementsByClassName("_65Bje")[0].click()')
+
+def wantFollow() : 
+    number = random.randint(1,10)    
+    if number % 2 == 0 :
+        waitFor(150,250,"wait follow")        
+        user = browser.find_element_by_xpath("/html/body/div[5]/div[2]/div/article/header/div[2]/div[1]/div[1]/span/a").get_attribute("href")
+        logger("Followed",user)
+        following.append(user)
+        follow = browser.find_element_by_xpath("/html/body/div[5]/div[2]/div/article/header/div[2]/div[1]/div[2]/button")
+        follow.send_keys(Keys.RETURN)
+
+def slidePic() : 
+    number = random.randint(1,3)
+    try:
+        for _ in range (0,number) : 
+            waitFor(500,350,"next slide")
+            nextSlide = browser.find_element_by_xpath("/html/body/div[1]/section/main/div/div[1]/article/div[2]/div/div[1]/div[2]/div/button")
+            nextSlide.send_keys(Keys.RETURN)
+    except :
+        return
+
     
 def pressLike() : 
-    likeBtn = browser.find_element(By.XPATH,'/html/body/div[1]/section/main/div/div[1]/article/div[3]/section[1]/span[1]/button')
+    waitFor(150,350,"wait for like")
+    likeBtn = browser.find_element(By.XPATH,'/html/body/div[5]/div[2]/div/article/div[3]/section[1]/span[1]/button')
     likeBtn.send_keys(Keys.RETURN)
 
 def search(tag) : 
@@ -83,3 +106,6 @@ count = config['count']
 tag = config['tag']
 
 bot()
+
+logger("Followed total",str(len(following)))
+print(following)
